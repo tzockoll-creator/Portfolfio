@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tom Zockoll | Enterprise AI Builder</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0c;
+            --bg-secondary: #111114;
+            --bg-card: #16161a;
+            --bg-card-hover: #1c1c22;
+            --border: #2a2a32;
+            --border-accent: #3d3d48;
+            --text-primary: #e8e6e3;
+            --text-secondary: #9a9898;
+            --text-muted: #6b6a6a;
+            --accent: #e8a43a;
+            --accent-glow: rgba(232, 164, 58, 0.12);
+            --accent-blue: #5b9cf5;
+            --accent-green: #5bdb7a;
+            --accent-purple: #a78bfa;
+            --accent-red: #f87171;
+            --radius: 10px;
+            --radius-lg: 16px;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .ambient-glow {
+            position: fixed; width: 600px; height: 600px; border-radius: 50%;
+            filter: blur(150px); opacity: 0.07; pointer-events: none; z-index: 0;
+        }
+        .glow-1 { top: -200px; right: -100px; background: var(--accent); }
+        .glow-2 { bottom: -200px; left: -100px; background: var(--accent-blue); }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+        /* NAV */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 16px 0;
+            background: rgba(10, 10, 12, 0.8); backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(42, 42, 50, 0.4);
+        }
+        nav .container { display: flex; align-items: center; justify-content: space-between; }
+        .nav-logo { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 1.1rem; color: var(--accent); letter-spacing: -0.02em; }
+        .nav-logo span { color: var(--text-muted); font-weight: 300; }
+        .nav-links { display: flex; gap: 32px; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.88rem; font-weight: 500; letter-spacing: 0.02em; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--text-primary); }
+
+        /* HERO */
+        .hero { padding: 160px 0 80px; }
+        .hero h1 { font-size: clamp(2.8rem, 6vw, 4.5rem); font-weight: 800; line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 20px; animation: fadeUp 0.6s ease-out 0.1s both; }
+        .hero h1 .highlight { background: linear-gradient(135deg, var(--accent), #f0c96e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero-sub { font-size: 1.15rem; color: var(--text-secondary); max-width: 620px; line-height: 1.7; margin-bottom: 36px; animation: fadeUp 0.6s ease-out 0.2s both; }
+        .hero-stats { display: flex; gap: 40px; flex-wrap: wrap; animation: fadeUp 0.6s ease-out 0.3s both; }
+        .hero-stat { display: flex; flex-direction: column; }
+        .hero-stat .num { font-family: 'JetBrains Mono', monospace; font-size: 1.6rem; font-weight: 700; color: var(--text-primary); }
+        .hero-stat .label { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* SECTIONS */
+        section { padding: 80px 0; }
+        .section-label { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent); margin-bottom: 12px; }
+        .section-title { font-size: 2rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 12px; }
+        .section-desc { color: var(--text-secondary); font-size: 1rem; max-width: 620px; margin-bottom: 48px; }
+
+        /* CARDS */
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+        .card {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg);
+            padding: 28px; transition: all 0.3s ease; color: inherit; display: block; position: relative; overflow: hidden;
+        }
+        .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--card-accent, var(--accent)), transparent); opacity: 0; transition: opacity 0.3s; }
+        .card:hover { background: var(--bg-card-hover); border-color: var(--border-accent); transform: translateY(-2px); }
+        .card:hover::before { opacity: 1; }
+        .card-icon { width: 44px; height: 44px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 18px; background: var(--accent-glow); border: 1px solid rgba(232, 164, 58, 0.15); }
+        .card-icon.blue { background: rgba(91, 156, 245, 0.1); border-color: rgba(91, 156, 245, 0.15); }
+        .card-icon.green { background: rgba(91, 219, 122, 0.1); border-color: rgba(91, 219, 122, 0.15); }
+        .card-icon.purple { background: rgba(167, 139, 250, 0.1); border-color: rgba(167, 139, 250, 0.15); }
+        .card-icon.red { background: rgba(248, 113, 113, 0.1); border-color: rgba(248, 113, 113, 0.15); }
+        .card h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 8px; }
+        .card p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; }
+        .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+        .tag { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; padding: 3px 10px; border-radius: 100px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); color: var(--text-muted); }
+        .card-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border); }
+        .card-links a {
+            display: inline-flex; align-items: center; gap: 5px;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-muted);
+            text-decoration: none; padding: 4px 10px; border-radius: 6px;
+            background: rgba(255,255,255,0.03); border: 1px solid var(--border); transition: all 0.2s;
+        }
+        .card-links a:hover { color: var(--accent); border-color: rgba(232, 164, 58, 0.3); background: var(--accent-glow); }
+        .icon-gh { width: 14px; height: 14px; }
+        .icon-yt { width: 14px; height: 14px; }
+
+        /* VIDEO GRID */
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+        .video-card { display: block; border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-card); border: 1px solid var(--border); transition: all 0.3s ease; }
+        .video-card:hover { border-color: var(--border-accent); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+        .video-embed { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: var(--bg-secondary); }
+        .video-embed iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        .video-info { padding: 18px 20px 20px; }
+        .video-info h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 6px; line-height: 1.4; }
+        .video-info p { font-size: 0.8rem; color: var(--text-muted); }
+
+        /* ABOUT */
+        .about-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 48px; }
+        .about-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; }
+        .about-card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 10px; }
+        .about-card p, .about-card li { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.7; }
+        .about-card ul { list-style: none; padding: 0; }
+        .about-card ul li::before { content: '\2192'; color: var(--accent); margin-right: 8px; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; }
+
+        /* AI BUILDERS CLUB BANNER */
+        .club-banner {
+            background: linear-gradient(135deg, rgba(91, 156, 245, 0.08), rgba(167, 139, 250, 0.08));
+            border: 1px solid rgba(91, 156, 245, 0.2); border-radius: var(--radius-lg);
+            padding: 36px 40px; display: flex; align-items: center; justify-content: space-between;
+            gap: 32px; margin-top: 48px; text-decoration: none; color: inherit; transition: all 0.3s;
+        }
+        .club-banner:hover { border-color: rgba(91, 156, 245, 0.4); background: linear-gradient(135deg, rgba(91, 156, 245, 0.12), rgba(167, 139, 250, 0.12)); transform: translateY(-2px); }
+        .club-info h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; }
+        .club-info p { color: var(--text-secondary); font-size: 0.92rem; max-width: 520px; }
+        .club-arrow { font-size: 1.5rem; color: var(--accent-blue); flex-shrink: 0; transition: transform 0.3s; }
+        .club-banner:hover .club-arrow { transform: translateX(4px); }
+
+        /* CTA */
+        .cta-section { text-align: center; padding: 80px 0 60px; }
+        .cta-section h2 { font-size: 2rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 12px; }
+        .cta-section p { color: var(--text-secondary); margin-bottom: 32px; }
+        .cta-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+        .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: var(--radius); font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: all 0.2s; }
+        .btn-primary { background: var(--accent); color: var(--bg-primary); }
+        .btn-primary:hover { background: #f0b44a; transform: translateY(-1px); }
+        .btn-secondary { background: transparent; color: var(--text-primary); border: 1px solid var(--border); }
+        .btn-secondary:hover { border-color: var(--border-accent); background: var(--bg-card); }
+
+        footer { padding: 40px 0; border-top: 1px solid var(--border); text-align: center; }
+        footer p { font-size: 0.8rem; color: var(--text-muted); }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero-stats { gap: 24px; }
+            .about-strip { grid-template-columns: 1fr; }
+            .card-grid, .video-grid { grid-template-columns: 1fr; }
+            section { padding: 60px 0; }
+            .club-banner { flex-direction: column; text-align: center; padding: 28px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="ambient-glow glow-1"></div>
+<div class="ambient-glow glow-2"></div>
+
+<nav>
+    <div class="container">
+        <div class="nav-logo">tom<span>.builds</span></div>
+        <div class="nav-links">
+            <a href="#projects">Projects</a>
+            <a href="#videos">Videos</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="container">
+        <h1>Enterprise Sales Engineer<br>who <span class="highlight">builds with AI</span></h1>
+        <p class="hero-sub">
+            I don't just demo AI — I build production tools with it. Senior Sales Engineer at Strategy (MicroStrategy) with 8+ years covering Fortune 500 accounts. By night, I ship Claude-powered applications that our GTM leadership actually uses.
+        </p>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <span class="num">8+</span>
+                <span class="label">Years Enterprise Sales</span>
+            </div>
+            <div class="hero-stat">
+                <span class="num">7-8 Fig</span>
+                <span class="label">Quota Attainment</span>
+            </div>
+            <div class="hero-stat">
+                <span class="num">2022</span>
+                <span class="label">Global SE of the Year</span>
+            </div>
+            <div class="hero-stat">
+                <span class="num">Multi-Year</span>
+                <span class="label">Presidents Club</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+    <div class="container">
+        <div class="section-label">// Claude Plugins, Skills & Enterprise Apps</div>
+        <h2 class="section-title">Built for Claude, Adopted in Production</h2>
+        <p class="section-desc">MCP servers, Claude Skills, and bespoke applications I've built — connecting AI to enterprise systems and used by Strategy's GTM team.</p>
+
+        <div class="card-grid">
+
+            <div class="card" style="--card-accent: var(--accent);">
+                <div class="card-icon">&#9889;</div>
+                <h3>Strategy Command Center</h3>
+                <p>Multi-agent orchestration plugin routing natural language queries across BI dashboards, Excel analysis, Asana, HubSpot, and Slack via intelligent agent dispatch.</p>
+                <div class="card-tags">
+                    <span class="tag">Claude Plugin</span>
+                    <span class="tag">Multi-Agent</span>
+                    <span class="tag">MCP</span>
+                    <span class="tag">React</span>
+                </div>
+                <div class="card-links">
+                    <a href="https://github.com/tzockoll-creator/Strategy-Command-Center-Claude-Plugin" target="_blank"><svg class="icon-gh" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg> GitHub</a>
+                    <a href="https://www.youtube.com/watch?v=1vYMyvSi_p0" target="_blank"><svg class="icon-yt" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg> Demo</a>
+                </div>
+            </div>
+
+            <div class="card" style="--card-accent: var(--accent-green);">
+                <div class="card-icon green">&#128208;</div>
+                <h3>Excel Automation + DAX Skill</h3>
+                <p>Expert DAX formula writing, time intelligence calculations, Power Pivot data modeling, and Excel automation — deployed as a Claude Skill on claude.ai.</p>
+                <div class="card-tags">
+                    <span class="tag">Claude Skill</span>
+                    <span class="tag">DAX</span>
+                    <span class="tag">Excel</span>
+                    <span class="tag">Power Pivot</span>
+                </div>
+                <div class="card-links">
+                    <a href="https://github.com/tzockoll-creator/DAX-Expert-Claude-Skill" target="_blank"><svg class="icon-gh" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg> GitHub</a>
+                    <a href="https://www.youtube.com/watch?v=rYXKPINqMTE" target="_blank"><svg class="icon-yt" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg> Demo</a>
+                </div>
+            </div>
+
+            <div class="card" style="--card-accent: var(--accent-blue);">
+                <div class="card-icon blue">&#129302;</div>
+                <h3>Strategy Business Analyst</h3>
+                <p>Automated BI analyst suite: reviews dashboards, identifies anomalies, enriches findings with web research, creates Asana tasks, and builds dashboards from natural language.</p>
+                <div class="card-tags">
+                    <span class="tag">Claude Skill</span>
+                    <span class="tag">Agent</span>
+                    <span class="tag">Dashboard Analysis</span>
+                    <span class="tag">Asana</span>
+                </div>
+                <div class="card-links">
+                    <a href="https://github.com/tzockoll-creator/Strategy-Analyst-Skill" target="_blank"><svg class="icon-gh" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg> Analyst</a>
+                    <a href="https://github.com/tzockoll-creator/Strategy-Dashboard-Creator-Power-User-" target="_blank"><svg class="icon-gh" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg> Dashboard</a>
+                    <a href="https://www.youtube.com/watch?v=MaI850c9LCA" target="_blank"><svg class="icon-yt" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg> Demo</a>
+                </div>
+            </div>
+
+            <div class="card" style="--card-accent: var(--accent-purple);">
+                <div class="card-icon purple">&#127974;</div>
+                <h3>Bespoke Enterprise Applications</h3>
+                <p>Custom applications built on Strategy's semantic layer and other enterprise APIs — transforming raw BI data into interactive, role-specific experiences.</p>
+                <div class="card-tags">
+                    <span class="tag">Semantic Layer</span>
+                    <span class="tag">Claude API</span>
+                    <span class="tag">React</span>
+                    <span class="tag">Enterprise</span>
+                </div>
+                <div class="card-links">
+                    <a href="https://github.com/tzockoll-creator/ClaudeBankingApp" target="_blank"><svg class="icon-gh" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg> Banking App</a>
+                    <a href="https://www.youtube.com/watch?v=k2c1WT-xlD4" target="_blank"><svg class="icon-yt" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg> Demo</a>
+                </div>
+            </div>
+
+            <div class="card" style="--card-accent: var(--accent-red);">
+                <div class="card-icon red">&#10024;</div>
+                <h3>Gemini Automation</h3>
+                <p>Blank sheet to board-ready in minutes — AI-powered spreadsheet automation that transforms empty Google Sheets into polished, presentation-ready deliverables.</p>
+                <div class="card-tags">
+                    <span class="tag">Gemini</span>
+                    <span class="tag">Automation</span>
+                    <span class="tag">Google Sheets</span>
+                </div>
+                <div class="card-links">
+                    <a href="https://www.youtube.com/watch?v=E07f9QyA5Qk" target="_blank"><svg class="icon-yt" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg> Demo</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- VIDEOS -->
+<section id="videos" style="background: var(--bg-secondary); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <div class="container">
+        <div class="section-label">// Demos & Walkthroughs</div>
+        <h2 class="section-title">Watch It in Action</h2>
+        <p class="section-desc">Video walkthroughs of my builds — from multi-agent command centers to enterprise BI integrations and AI automation.</p>
+
+        <div class="video-grid">
+            <div class="video-card">
+                <div class="video-embed">
+                    <iframe src="https://www.youtube-nocookie.com/embed/1vYMyvSi_p0" title="Strategy Command Center Demo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+                </div>
+                <div class="video-info">
+                    <h3>Strategy Command Center: Multi-Agent Orchestration</h3>
+                    <p>Routing queries across BI, CRM, and project management tools</p>
+                </div>
+            </div>
+
+            <div class="video-card">
+                <div class="video-embed">
+                    <iframe src="https://www.youtube-nocookie.com/embed/rYXKPINqMTE" title="DAX Skill Demo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+                </div>
+                <div class="video-info">
+                    <h3>Excel Automation + DAX Expert Skill</h3>
+                    <p>Claude-powered DAX formula writing and Power Pivot modeling</p>
+                </div>
+            </div>
+
+            <div class="video-card">
+                <div class="video-embed">
+                    <iframe src="https://www.youtube-nocookie.com/embed/MaI850c9LCA" title="Strategy Analyst Demo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+                </div>
+                <div class="video-info">
+                    <h3>Strategy Business Analyst: Dashboard Analysis Agent</h3>
+                    <p>Automated anomaly detection and task creation from BI dashboards</p>
+                </div>
+            </div>
+
+            <div class="video-card">
+                <div class="video-embed">
+                    <iframe src="https://www.youtube-nocookie.com/embed/k2c1WT-xlD4" title="Banking App Demo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+                </div>
+                <div class="video-info">
+                    <h3>Bespoke Banking App on Strategy Semantic Layer</h3>
+                    <p>Custom AI application built on enterprise BI infrastructure</p>
+                </div>
+            </div>
+
+            <div class="video-card">
+                <div class="video-embed">
+                    <iframe src="https://www.youtube-nocookie.com/embed/E07f9QyA5Qk" title="Gemini Automation Demo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+                </div>
+                <div class="video-info">
+                    <h3>Gemini Automation: Blank Sheet to Board Ready</h3>
+                    <p>AI-powered spreadsheet automation in minutes</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+    <div class="container">
+        <div class="section-label">// About</div>
+        <h2 class="section-title">The Builder's Resume</h2>
+
+        <div class="about-strip">
+            <div class="about-card">
+                <h3>Enterprise Sales</h3>
+                <ul>
+                    <li>Sr. Sales Engineer at Strategy (MicroStrategy)</li>
+                    <li>Fortune 500 accounts: HEB, Whole Foods, Christus Health, BSW Health</li>
+                    <li>TX, OK, LA, AR — Healthcare, Energy, Financial Services</li>
+                    <li>Multiple Presidents Club wins &middot; 7-8 figure quota attainment</li>
+                    <li>2022 Global Sales Engineer of the Year</li>
+                </ul>
+            </div>
+            <div class="about-card">
+                <h3>What I Build</h3>
+                <ul>
+                    <li>MCP servers connecting Claude to enterprise systems</li>
+                    <li>Multi-agent orchestration (BI + CRM + PM tools)</li>
+                    <li>Custom Claude Skills deployed on claude.ai</li>
+                    <li>Bespoke apps on enterprise semantic layers</li>
+                    <li>React apps, Python backends, API integrations</li>
+                </ul>
+            </div>
+            <div class="about-card">
+                <h3>Why It Matters</h3>
+                <p>
+                    Most sales engineers talk about AI. I build with it — every day, in production, solving real business problems. I've shipped tools that my company's leadership uses because I understand both the technical depth and the enterprise buyer's language.
+                </p>
+            </div>
+            <div class="about-card">
+                <h3>Community & Side Projects</h3>
+                <ul>
+                    <li><strong>AI Builders Club DFW</strong> — Founder</li>
+                    <li><strong>Future Founders Initiative</strong> — Teaching kids to code</li>
+                    <li><strong>Heritage Guard</strong> — Asset documentation service</li>
+                    <li>Investment analysis tools & trading systems</li>
+                </ul>
+            </div>
+        </div>
+
+        <a href="https://tzockoll-creator.github.io/AI-Builders-Club/" target="_blank" class="club-banner">
+            <div class="club-info">
+                <h3>AI Builders Club DFW</h3>
+                <p>Founder of a 6-week course teaching high schoolers and college grads to build and automate with AI systems. Hands-on projects, real tools, real outcomes.</p>
+            </div>
+            <span class="club-arrow">&rarr;</span>
+        </a>
+    </div>
+</section>
+
+<!-- CTA -->
+<section id="contact" class="cta-section">
+    <div class="container">
+        <h2>Let's build something together</h2>
+        <p>Looking for my next role at the intersection of AI and enterprise.</p>
+        <div class="cta-buttons">
+            <a href="mailto:tzockoll@gmail.com" class="btn btn-primary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                tzockoll@gmail.com
+            </a>
+            <a href="https://www.linkedin.com/in/thomas-zockoll-0ba70b126/" target="_blank" class="btn btn-secondary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/></svg>
+                LinkedIn
+            </a>
+            <a href="https://github.com/tzockoll-creator" target="_blank" class="btn btn-secondary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                GitHub
+            </a>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <p>Built by Tom Zockoll &middot; Powered by Claude &middot; Shipped on GitHub Pages</p>
+    </div>
+</footer>
+
+<script>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.card, .video-card, .about-card, .club-banner').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'opacity 0.5s ease, transform 0.5s ease, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease';
+        observer.observe(el);
+    });
+</script>
+
+</body>
+</html>

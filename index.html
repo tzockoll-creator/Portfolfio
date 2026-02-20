@@ -117,6 +117,12 @@
         .icon-gh { width: 14px; height: 14px; }
         .icon-yt { width: 14px; height: 14px; }
 
+        /* FEATURED VIDEO */
+        .featured-video { max-width: 800px; margin: 0 auto; animation: fadeUp 0.6s ease-out 0.4s both; }
+        .featured-video .video-card { border-color: rgba(232, 164, 58, 0.25); }
+        .featured-video .video-card:hover { border-color: rgba(232, 164, 58, 0.4); }
+        .featured-label { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); margin-bottom: 12px; text-align: center; }
+
         /* VIDEO GRID */
         .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
         .video-card { display: block; border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-card); border: 1px solid var(--border); transition: all 0.3s ease; }
@@ -212,6 +218,24 @@
             <div class="hero-stat">
                 <span class="num">Multi-Year</span>
                 <span class="label">Presidents Club</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURED DEMO -->
+<section style="padding-top: 0; padding-bottom: 60px;">
+    <div class="container">
+        <div class="featured-video">
+            <div class="featured-label">// Featured Demo</div>
+            <div class="video-card">
+                <div class="video-embed">
+                    <iframe src="https://www.youtube-nocookie.com/embed/q0WW82y32GQ" title="Voice AI Agent + Semantic Layer" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+                </div>
+                <div class="video-info">
+                    <h3>Voice AI Agent Grounded in the Semantic Layer</h3>
+                    <p>A live ElevenLabs voice agent querying enterprise retail data through Claude + MCP. No SQL, no hallucinations — the semantic layer handles the math while the AI handles the conversation. Production-ready in under two minutes.</p>
+                </div>
             </div>
         </div>
     </div>
@@ -379,76 +403,7 @@
         <p class="section-desc">Video walkthroughs of my builds — from multi-agent command centers and voice AI agents to CRM automation, programmatic video generation, and enterprise BI integrations.</p>
 
         <div class="video-grid">
-            <div class="video-card">
-                <div class="video-embed">
-                    <iframe src="https://www.youtube-nocookie.com/embed/1vYMyvSi_p0" title="Strategy Command Center Demo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
-                </div>
-                <div class="video-info">
-                    <h3>Strategy Command Center: Multi-Agent Orchestration</h3>
-                    <p>Routing queries across BI, CRM, and project management tools</p>
-                </div>
-            </div>
-
-            <div class="video-card">
-                <div class="video-embed">
-                    <iframe src="https://www.youtube-nocookie.com/embed/rYXKPINqMTE" title="DAX Skill Demo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
-                </div>
-                <div class="video-info">
-                    <h3>Excel Automation + DAX Expert Skill</h3>
-                    <p>Claude-powered DAX formula writing and Power Pivot modeling</p>
-                </div>
-            </div>
-
-            <div class="video-card">
-                <div class="video-embed">
-                    <iframe src="https://www.youtube-nocookie.com/embed/MaI850c9LCA" title="Strategy Analyst Demo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
-                </div>
-                <div class="video-info">
-                    <h3>Strategy Business Analyst: Dashboard Analysis Agent</h3>
-                    <p>Automated anomaly detection and task creation from BI dashboards</p>
-                </div>
-            </div>
-
-            <div class="video-card">
-                <div class="video-embed">
-                    <iframe src="https://www.youtube-nocookie.com/embed/k2c1WT-xlD4" title="Banking App Demo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
-                </div>
-                <div class="video-info">
-                    <h3>Bespoke Banking App on Strategy Semantic Layer</h3>
-                    <p>Custom AI application built on enterprise BI infrastructure</p>
-                </div>
-            </div>
-
-            <div class="video-card">
-                <div class="video-embed">
-                    <iframe src="https://www.youtube-nocookie.com/embed/E07f9QyA5Qk" title="Gemini Automation Demo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
-                </div>
-                <div class="video-info">
-                    <h3>Gemini Automation: Blank Sheet to Board Ready</h3>
-                    <p>AI-powered spreadsheet automation in minutes</p>
-                </div>
-            </div>
-
-            <div class="video-card">
-                <div class="video-embed">
-                    <iframe src="https://www.youtube-nocookie.com/embed/mIfkyCskxBw" title="Automated QBR Decks Demo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
-                </div>
-                <div class="video-info">
-                    <h3>Automated QBR Decks with Strategy Semantic Layer + Claude for PPT</h3>
-                    <p>AI-generated quarterly business review presentations from semantic layer data</p>
-                </div>
-            </div>
-
-            <div class="video-card">
-                <div class="video-embed">
-                    <iframe src="https://www.youtube-nocookie.com/embed/TMovlcrJyQY" title="Text-to-App: The Semantic Layer Advantage" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
-                </div>
-                <div class="video-info">
-                    <h3>Text-to-App: The Semantic Layer Advantage (Claude Code + Strategy Mosaic)</h3>
-                    <p>Connecting an LLM directly to a semantic layer for instant, hallucination-free app generation</p>
-                </div>
-            </div>
-
+            <!-- Newest -->
             <div class="video-card">
                 <div class="video-embed">
                     <iframe src="https://www.youtube-nocookie.com/embed/q0WW82y32GQ" title="Voice AI Agent + Semantic Layer" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
@@ -476,6 +431,78 @@
                 <div class="video-info">
                     <h3>Programmatic Video Generation: Semantic Layer to MP4</h3>
                     <p>Claude Code + MCP + Remotion — zero-edit video pipeline from terminal to broadcast-ready corporate reporting</p>
+                </div>
+            </div>
+
+            <!-- Recent -->
+            <div class="video-card">
+                <div class="video-embed">
+                    <iframe src="https://www.youtube-nocookie.com/embed/TMovlcrJyQY" title="Text-to-App: The Semantic Layer Advantage" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+                </div>
+                <div class="video-info">
+                    <h3>Text-to-App: The Semantic Layer Advantage (Claude Code + Strategy Mosaic)</h3>
+                    <p>Connecting an LLM directly to a semantic layer for instant, hallucination-free app generation</p>
+                </div>
+            </div>
+
+            <div class="video-card">
+                <div class="video-embed">
+                    <iframe src="https://www.youtube-nocookie.com/embed/mIfkyCskxBw" title="Automated QBR Decks Demo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+                </div>
+                <div class="video-info">
+                    <h3>Automated QBR Decks with Strategy Semantic Layer + Claude for PPT</h3>
+                    <p>AI-generated quarterly business review presentations from semantic layer data</p>
+                </div>
+            </div>
+
+            <div class="video-card">
+                <div class="video-embed">
+                    <iframe src="https://www.youtube-nocookie.com/embed/1vYMyvSi_p0" title="Strategy Command Center Demo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+                </div>
+                <div class="video-info">
+                    <h3>Strategy Command Center: Multi-Agent Orchestration</h3>
+                    <p>Routing queries across BI, CRM, and project management tools</p>
+                </div>
+            </div>
+
+            <!-- Earlier -->
+            <div class="video-card">
+                <div class="video-embed">
+                    <iframe src="https://www.youtube-nocookie.com/embed/MaI850c9LCA" title="Strategy Analyst Demo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+                </div>
+                <div class="video-info">
+                    <h3>Strategy Business Analyst: Dashboard Analysis Agent</h3>
+                    <p>Automated anomaly detection and task creation from BI dashboards</p>
+                </div>
+            </div>
+
+            <div class="video-card">
+                <div class="video-embed">
+                    <iframe src="https://www.youtube-nocookie.com/embed/E07f9QyA5Qk" title="Gemini Automation Demo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+                </div>
+                <div class="video-info">
+                    <h3>Gemini Automation: Blank Sheet to Board Ready</h3>
+                    <p>AI-powered spreadsheet automation in minutes</p>
+                </div>
+            </div>
+
+            <div class="video-card">
+                <div class="video-embed">
+                    <iframe src="https://www.youtube-nocookie.com/embed/k2c1WT-xlD4" title="Banking App Demo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+                </div>
+                <div class="video-info">
+                    <h3>Bespoke Banking App on Strategy Semantic Layer</h3>
+                    <p>Custom AI application built on enterprise BI infrastructure</p>
+                </div>
+            </div>
+
+            <div class="video-card">
+                <div class="video-embed">
+                    <iframe src="https://www.youtube-nocookie.com/embed/rYXKPINqMTE" title="DAX Skill Demo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+                </div>
+                <div class="video-info">
+                    <h3>Excel Automation + DAX Expert Skill</h3>
+                    <p>Claude-powered DAX formula writing and Power Pivot modeling</p>
                 </div>
             </div>
         </div>
@@ -582,7 +609,7 @@
         });
     }, { threshold: 0.1 });
 
-    document.querySelectorAll('.card, .video-card, .about-card, .club-banner').forEach(el => {
+    document.querySelectorAll('.card, .video-card, .about-card, .club-banner, .featured-video').forEach(el => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(20px)';
         el.style.transition = 'opacity 0.5s ease, transform 0.5s ease, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease';
